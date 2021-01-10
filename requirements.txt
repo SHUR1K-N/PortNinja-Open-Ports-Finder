@@ -1,0 +1,3 @@
+requests	# for automatic update checks
+colorama 	# for colors
+termcolor 	# for colors
