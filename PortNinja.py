@@ -4,7 +4,7 @@ import colorama; from termcolor import colored
 
 colorama.init()
 
-currentVersionNumber = "v1.0.0"
+currentVersionNumber = "v1.1.0"
 VERSION_CHECK_URL = "https://raw.githubusercontent.com/SHUR1K-N/PortNinja-Open-Ports-Finder/master/versionfile.txt"
 BANNER1 = colored('''
    ██▓███   ▒█████   ██▀███  ▄▄▄█████▓ ███▄    █  ██▓ ███▄    █  ▄▄▄██▀▀▀▄▄▄
@@ -30,7 +30,7 @@ def printBanner():
 def versionCheck():
     global currentVersionNumber
 
-    print("\nChecking for MeetNinja updates...", end="")
+    print("\nChecking for PortNinja updates...", end="")
 
     crawlVersionFile = requests.get(VERSION_CHECK_URL)
     crawlVersionFile = str(crawlVersionFile.content)
@@ -65,7 +65,7 @@ def checkThreads(target):
     threadingPool = []
     clrscr()
     print(f"\nScanning {target} for open ports within range 0 – 65535...\n")
-    for thread in range(0, 65535):
+    for thread in range(0, 65536):
         threadingPool.append(threading.Thread(target=portCheck, args=[target, thread]))
         threadingPool[thread].start()
     for thread in threadingPool:
@@ -92,9 +92,12 @@ if __name__ == "__main__":
         target = target[8:]
     if (target[-1] == "/"):
         target = target[:-1]
-    checkThreads(target)
 
-    print("\nScan completed successfully!")
+    start = time.time()
+    checkThreads(target)
+    completionTime = time.time() - start
+
+    print(f"\n\nThe scan completed successfully in {completionTime} seconds.")
     print(f"Total open ports: {totalOpen}")
 
     print("\nPress Enter to exit.")
