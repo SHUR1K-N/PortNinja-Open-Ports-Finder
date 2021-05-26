@@ -1,10 +1,10 @@
 import threading; import socket; import requests
-import time; import os; import re
+import time; import os; import re; import random
 import colorama; from termcolor import colored
 
 colorama.init()
 
-currentVersionNumber = "v1.1.0"
+currentVersionNumber = "v2.1.0"
 VERSION_CHECK_URL = "https://raw.githubusercontent.com/SHUR1K-N/PortNinja-Open-Ports-Finder/master/versionfile.txt"
 BANNER1 = colored('''
    ██▓███   ▒█████   ██▀███  ▄▄▄█████▓ ███▄    █  ██▓ ███▄    █  ▄▄▄██▀▀▀▄▄▄
@@ -20,6 +20,7 @@ BANNER2 = colored('''                    -------------------------------------''
 BANNER3 = colored('''                    || PortNinja: The Open Ports Finder ||''', 'red')
 BANNER4 = colored('''                    -------------------------------------''', 'blue')
 
+print_lock = threading.Lock()
 totalOpen = 0
 
 
@@ -49,27 +50,52 @@ def versionCheck():
         print(colored("Please do not open an Issue if you see this message and have not yet tried the latest version.", "yellow"))
 
 
-def portCheck(target, port):
+def portScan(checkedURL, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     socket.setdefaulttimeout(1)
 
-    result = sock.connect_ex((target, port))
+    result = sock.connect_ex((checkedURL, port))
     if (result == 0):
-        print(colored(f"Port {port} is open", "green"))
-        global totalOpen
-        totalOpen += 1
+        with print_lock:
+            print(colored(f"Port {port} is open", "green"))
+            global totalOpen
+            totalOpen += 1
     sock.close()
 
 
-def checkThreads(target):
+def createThreads(checkedURL):
     threadingPool = []
     clrscr()
-    print(f"\nScanning {target} for open ports within range 0 – 65535...\n")
-    for thread in range(0, 65536):
-        threadingPool.append(threading.Thread(target=portCheck, args=[target, thread]))
-        threadingPool[thread].start()
-    for thread in threadingPool:
-        thread.join()
+    if (method in ["1", "2"]):
+        print(f"\nScanning \"{URL}\" for open ports within range {portMin} – {portMax}...\n")
+        for thread, port in enumerate(range(portMin, portMax + 1)):
+            threadingPool.append(threading.Thread(target=portScan, args=[checkedURL, port]))
+            threadingPool[thread].daemon = True
+            threadingPool[thread].start()
+        for thread in threadingPool:
+            thread.join()
+    if (method == "3"):
+        print(f"\nScanning \"{URL}\" for open ports within {portSelective}...\n")
+        for thread, port in enumerate(portSelective):
+            threadingPool.append(threading.Thread(target=portScan, args=[checkedURL, port]))
+            threadingPool[thread].daemon = True
+            threadingPool[thread].start()
+        for thread in threadingPool:
+            thread.join()
+
+
+def processURL(URL):
+    if URL.lower().startswith("http://"):
+        URL = URL[7:]
+    if URL.lower().startswith("http://www."):
+        URL = URL[11:]
+    elif URL.lower().startswith("https://"):
+        URL = URL[8:]
+    if URL.lower().startswith("www."):
+        URL = URL[4:]
+    if (URL[-1] == "/"):
+        URL = URL[:-1]
+    return(URL)
 
 
 def clrscr():
@@ -85,16 +111,51 @@ if __name__ == "__main__":
     printBanner()
     versionCheck()
 
-    target = input("\nInput target URL to scan: ")
-    if target.lower().startswith("http://"):
-        target = target[7:]
-    elif target.lower().startswith("https://"):
-        target = target[8:]
-    if (target[-1] == "/"):
-        target = target[:-1]
+    while(True):
+        try:
+            URL = input("\nInput target URL to scan: ")
+            checkedURL = processURL(URL)
+            break
+        except:
+            print(colored(" Failed!", "red"))
+            print("\nInvalid URL. Try again.")
+            continue
+
+    while (True):
+        print("\n\nMethods:-")
+        print("1. Scan all ports (0 – 65535)\n2. Scan ports in a custom range\n3. Scan individually specified ports")
+        method = input("\nSelect method number: ")
+        if (method == "1"):
+                portMin = 1
+                portMax = 65535
+                break
+        elif (method == "2"):
+            unsorted = []
+            while (True):
+                portMin = int(input("\nEnter starting port here: "))
+                portMax = int(input("\nEnter ending port here: "))
+                if ((portMax - portMin) > 0):
+                    break
+                else:
+                    clrscr()
+                    print("\nEither invalid port numbers specified, or starting port number is greater than ending port number. Try again.\n")
+                    continue
+            break
+        elif (method == "3"):
+            try:
+                portSelective = list(map(int, input("\nEnter port numbers separated by spaces here: ").split()))
+                break
+            except:
+                clrscr()
+                print("\nOne or more invalid port numbers specified. Try again.\n")
+                continue
+        else:
+            clrscr()
+            print("\nInvalid entry. Choose either option 1, 2 or 3. Try again.")
+            continue
 
     start = time.time()
-    checkThreads(target)
+    createThreads(checkedURL)
     completionTime = time.time() - start
 
     print(f"\n\nThe scan completed successfully in {completionTime} seconds.")
