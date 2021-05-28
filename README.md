@@ -13,12 +13,12 @@ The user can select one of four scan speed profiles for use case-specific execut
 
 <div align="center">
 
-|Profile  |Speed    |Accuracy                                   |Scan Time    |
-|---------|---------|-------------------------------------------|-------------|
-|1.	      |Slowest  |Most accurate (zero / minimum missed ports)|~3+ hours    |
-|2.	      |Slower   |Very accurate (minimum missed ports)       |~2 hours     |
-|3.	      |Faster   |Accurate (missed ports not *impossible*)   |~15+ minutes |
-|4.	      |Fastest  |Accurate-ish (may miss ports)              |A few seconds|
+|Profile  |Speed    |Accuracy                                       |Scan Time    |
+|---------|---------|-----------------------------------------------|-------------|
+|1	      |Slowest  |Most accurate (zero / minimum missed ports)    |~3+ hours    |
+|2	      |Slower   |Very accurate (minimum missed ports)           |~2 hours     |
+|3	      |Faster   |Fairly accurate (missed ports not *impossible*)|~15+ minutes |
+|4	      |Fastest  |Accurate-ish (may miss ports)                  |A few seconds|
 
 </div>
 
