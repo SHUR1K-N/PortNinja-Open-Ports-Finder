@@ -1,26 +1,19 @@
 # PortNinja: Open Ports Finder
 
 ## Description & Usage
-A super fast multithreaded ports scanner that scans for open listening ports on the specified target server with the following methods:
+A super fast multithreaded ports scanner that scans for open listening ports on the specified target server using any the following methods:
 
 1. All ports in existence (1 – 65,535)
 2. Top 1,000 common ports only [(reference)](https://nullsec.us/top-1-000-tcp-and-udp-ports-nmap-default/)
 3. User-specified range of ports
 4. User-specified individual ports
 
-<div align="center">
-<img src="https://raw.githubusercontent.com/SHUR1K-N/PortNinja-Open-Ports-Finder/master/Images/Example.png" >
-<p>Example Execution</p>
-</div>
-
-This project was created in Python, for research purposes.
-
-## Scan Speeds
-The user can select one of four scan speed options for use case-specific executions, ranging from slowest (most accurate) to fastest (may miss ports), as shown below:
+### Scan Speed Profiles
+The user can select one of four scan speed profiles for use case-specific executions, ranging from slowest (most accurate) to fastest (may miss ports), as shown below:
 
 <div align="center">
 
-|Option   |Speed    |Accuracy                                   |Scan Time    |
+|Profile  |Speed    |Accuracy                                   |Scan Time    |
 |---------|---------|-------------------------------------------|-------------|
 |1.	      |Slowest  |Most accurate (zero / minimum missed ports)|~3+ hours    |
 |2.	      |Slower   |Very accurate (minimum missed ports)       |~2 hours     |
@@ -29,7 +22,15 @@ The user can select one of four scan speed options for use case-specific executi
 
 </div>
 
-The default scan speed is option #3, and provides a fairly accurate result while being fast. However, for specific use cases, a slower or faster scan could be required.
+The default profile is option #3, and provides a fairly accurate result while being fast. However, for specific use cases, a slower or faster profile could be required.
+
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/SHUR1K-N/PortNinja-Open-Ports-Finder/master/Images/Example.png" >
+<p>Example Execution</p>
+</div>
+
+This project was created in Python, for research purposes.
 
 ## Optimization
 Multithreading was implemented in this program to create a dedicated software thread for each socket to connect to a dedicated port of the specified target. All these sockets/threads are briefly created, then connected to their individual dedicated ports concurrently to maximize the scan rate, and then correctly terminated upon completion of execution.
