@@ -118,11 +118,11 @@ def processURL(URL):
 
 
 def speedPrompt():
-    print("\n\nScan speed:-\n[1] Slowest | Most accurate | May take 3+ hours")
+    print("\n\nScan Speed Profile:-\n[1] Slowest | Most accurate | May take 3+ hours")
     print("[2] Slower | Very accurate | May take 2 hours")
     print("[3] Faster | Accurate-ish | May take 15+ minutes")
     print("[4] Fastest | May miss ports | Will take seconds")
-    scanSpeed = (int(input("\nSelect scan speed number (Default = 3): ") or 3))
+    scanSpeed = (int(input("\nSelect speed profile (Default = 3): ") or 3))
     return(scanSpeed)
 
 
