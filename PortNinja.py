@@ -118,10 +118,10 @@ def processURL(URL):
 
 
 def speedPrompt():
-    print("\n\nScan Speed Profile:-\n[1] Slowest | Most accurate | May take 3+ hours")
-    print("[2] Slower | Very accurate | May take 2 hours")
-    print("[3] Faster | Accurate-ish | May take 15+ minutes")
-    print("[4] Fastest | May miss ports | Will take seconds")
+    print("\n\nScan Speed Profiles:-\n[1] Slowest\t| Most accurate\t\t| May take 3+ hours")
+    print("[2] Slower\t| Very accurate\t\t| May take 2 hours")
+    print("[3] Faster\t| Fairly accurate\t| May take 15+ minutes")
+    print("[4] Fastest\t| May miss ports\t| May take a few seconds")
     scanSpeed = (int(input("\nSelect speed profile (Default = 3): ") or 3))
     return(scanSpeed)
 
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     while (True):
         print("\n\nMethods:-")
         print("[1] Scan all ports (1 – 65,535)\n[2] Scan top 1,000 common ports\n[3] Scan ports in a custom range\n[4] Scan specific custom ports")
-        method = input("\nSelect method number: ")
+        method = input("\nSelect method: ")
         if (method == "1"):
                 portMin = 1
                 portMax = 65535
